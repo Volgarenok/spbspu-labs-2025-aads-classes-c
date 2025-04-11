@@ -47,7 +47,7 @@ int main()
     }
     clear(root);
   }
-  catch (const std::logic_error& e)
+  catch (const std::out_of_range& e)
   {
     clear(root);
     std::cerr << e.what() << '\n';

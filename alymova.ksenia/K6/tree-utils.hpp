@@ -69,7 +69,7 @@ BiTree< T >* create(std::istream& in, size_t cnt, Comparator comp)
   if (!in)
   {
     clear(root);
-    throw std::logic_error("<INVALID INPUT>");
+    throw std::out_of_range("<INVALID INPUT>");
   }
   return root;
 }
