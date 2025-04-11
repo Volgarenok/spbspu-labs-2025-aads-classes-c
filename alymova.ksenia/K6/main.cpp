@@ -47,6 +47,12 @@ int main()
     }
     clear(root);
   }
+  catch (const std::bad_alloc& e)
+  {
+    clear(root);
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
   catch (const std::out_of_range& e)
   {
     clear(root);
