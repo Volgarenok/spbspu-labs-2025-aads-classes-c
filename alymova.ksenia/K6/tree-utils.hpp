@@ -149,7 +149,6 @@ void clear(BiTree< T >* root)
     clear(root->left);
     clear(root->right);
     delete root;
-    root = nullptr;
   }
 }
 

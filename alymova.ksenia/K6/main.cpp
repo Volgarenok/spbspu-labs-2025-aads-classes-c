@@ -31,6 +31,10 @@ int main()
       {
         new_root = rotate_left(new_root);
       }
+      if (root == find(root, num, std::less< int >()))
+      {
+        root = new_root;
+      }
       std::cout << new_root->data << '\n';
     }
     if (!std::cin.eof())
