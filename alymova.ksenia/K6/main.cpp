@@ -8,7 +8,7 @@ int main()
   std::cin >> cnt;
   if (std::cin.fail())
   {
-    std::cout << "<INVAID INPUT>\n";
+    std::cerr << "<INVAID INPUT>\n";
     return 1;
   }
   BiTree< int >* root = nullptr;
@@ -45,12 +45,18 @@ int main()
     {
       throw std::invalid_argument("<INVALID COMMAND>");
     }
+    clear(root);
   }
-  catch(const std::exception& e)
+  catch (const std::logic_error& e)
+  {
+    clear(root);
+    std::cerr << e.what() << '\n';
+    return 1;
+  }
+  catch (const std::exception& e)
   {
     clear(root);
     std::cout << e.what() << '\n';
     return 1;
   }
-  clear(root);
 }
