@@ -51,12 +51,12 @@ int main()
   {
     clear(root);
     std::cout << e.what() << '\n';
-    return 1;
+    return 0;
   }
   catch (const std::exception& e)
   {
     clear(root);
     std::cerr << e.what() << '\n';
-    return 0;
+    return 1;
   }
 }
