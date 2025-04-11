@@ -31,6 +31,10 @@ int main()
       {
         new_root = rotate_left(new_root);
       }
+      else
+      {
+        throw std::invalid_argument("<INVALID COMMAND>");
+      }
       if (root == find(root, num, std::less< int >()))
       {
         root = new_root;

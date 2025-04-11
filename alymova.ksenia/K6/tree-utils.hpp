@@ -81,7 +81,7 @@ BiTree< T >* rotate_right(BiTree< T >* root)
   {
     throw std::invalid_argument("<INVALID ROTATE>");
   }
-  if (!root->right)
+  if (!root->left)
   {
     throw std::invalid_argument("<INVALID ROTATE>");
   }
@@ -100,7 +100,7 @@ BiTree< T >* rotate_left(BiTree< T >* root)
   {
     throw std::invalid_argument("<INVALID ROTATE>");
   }
-  if (!root->left)
+  if (!root->right)
   {
     throw std::invalid_argument("<INVALID ROTATE>");
   }
