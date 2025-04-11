@@ -8,7 +8,7 @@ int main()
   std::cin >> cnt;
   if (std::cin.fail())
   {
-    std::cerr << "<INVAID INPUT>\n";
+    std::cerr << "<INVALID INPUT>\n";
     return 1;
   }
   BiTree< int >* root = nullptr;
@@ -47,22 +47,16 @@ int main()
     }
     clear(root);
   }
-  catch (const std::bad_alloc& e)
+  catch (const std::invalid_argument& e)
   {
     clear(root);
-    std::cerr << e.what() << '\n';
-    return 1;
-  }
-  catch (const std::out_of_range& e)
-  {
-    clear(root);
-    std::cerr << e.what() << '\n';
+    std::cout << e.what() << '\n';
     return 1;
   }
   catch (const std::exception& e)
   {
     clear(root);
-    std::cout << e.what() << '\n';
-    return 1;
+    std::cerr << e.what() << '\n';
+    return 0;
   }
 }
