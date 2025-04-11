@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 #include "tree-utils.hpp"
 
 int main()

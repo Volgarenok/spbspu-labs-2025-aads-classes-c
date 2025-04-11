@@ -1,6 +1,7 @@
 #ifndef TREE_UTILS_HPP
 #define TREE_UTILS_HPP
 #include <exception>
+#include <iostream>
 
 template< class T >
 struct BiTree {
