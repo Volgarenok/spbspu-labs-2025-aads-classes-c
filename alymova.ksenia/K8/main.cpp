@@ -23,6 +23,7 @@ int main()
     {
       BiTree< int, std::less< int > >* result = nullptr;
       root = extract< int, std::less< int > >(root, num, &result);
+      delete result;
       if (result == nullptr)
       {
         std::cout << "<INVALID NODE>\n";
