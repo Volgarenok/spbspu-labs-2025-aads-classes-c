@@ -262,7 +262,7 @@ BiTree< T, Comparator >* next(BiTree< T, Comparator >* root)
     root = root->parent;
     if (!root->parent)
     {
-      return nullptr; 
+      return nullptr;
     }
   }
   return root->parent;
