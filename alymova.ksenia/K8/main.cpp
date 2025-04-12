@@ -23,11 +23,12 @@ int main()
     {
       BiTree< int, std::less< int > >* result = nullptr;
       root = extract< int, std::less< int > >(root, num, &result);
-      delete result;
       if (result == nullptr)
       {
         std::cout << "<INVALID NODE>\n";
+        continue;
       }
+      delete result;
     }
     if (!std::cin.eof())
     {
@@ -36,6 +37,7 @@ int main()
       throw std::out_of_range("<INVALID COMMAND>");
     }
     print< int, std::less< int > >(std::cout, root);
+    std::cout << '\n';
     clear(root);
   }
   catch (const std::invalid_argument& e)
