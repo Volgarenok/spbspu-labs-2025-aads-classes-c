@@ -101,7 +101,6 @@ BiTree< T, Comparator >* rotate_right(BiTree< T, Comparator >* root)
   {
     throw std::invalid_argument("<INVALID ROTATE>");
   }
-  std::cout << root->data << root->left->data;
   BiTree< T, Comparator >* new_root = root->left;
   new_root->parent = root->parent;
   if (root->parent)
@@ -232,7 +231,7 @@ void print(std::ostream& out, BiTree< T, Comparator >* root)
     }
     out << root->data;
     cnt += 1;
-  }
+  }*/
 }
 
 template< class T, class Comparator >

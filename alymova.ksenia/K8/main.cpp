@@ -32,7 +32,6 @@ int main()
     }
     if (!std::cin.eof())
     {
-      print< int, std::less< int > >(std::cout, root);
       std::cout << '\n';
       throw std::out_of_range("<INVALID COMMAND>");
     }
