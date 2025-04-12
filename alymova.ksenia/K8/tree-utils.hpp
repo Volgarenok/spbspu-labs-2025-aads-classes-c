@@ -53,14 +53,22 @@ BiTree< T, Comparator >* create(std::istream& in, size_t cnt, Comparator cmp)
     }
     in >> node->data;
     BiTree< T, Comparator >* tmp = root;
-    while (tmp->left && tmp->right)
+    while (tmp->left || tmp->right)
     {
       if (cmp(node->data, tmp->data))
       {
+        if (!tmp->left)
+        {
+          break;
+        }
         tmp = tmp->left;
       }
       else
       {
+        if (!tmp->right)
+        {
+          break;
+        }
         tmp = tmp->right;
       }
     }
@@ -93,6 +101,7 @@ BiTree< T, Comparator >* rotate_right(BiTree< T, Comparator >* root)
   {
     throw std::invalid_argument("<INVALID ROTATE>");
   }
+  std::cout << root->data << root->left->data;
   BiTree< T, Comparator >* new_root = root->left;
   new_root->parent = root->parent;
   if (root->parent)
