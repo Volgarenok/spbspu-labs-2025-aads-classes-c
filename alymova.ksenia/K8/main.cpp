@@ -4,7 +4,6 @@
 
 int main()
 {
-  const auto comp = std::less< int >();
   size_t cnt;
   std::cin >> cnt;
   if (std::cin.fail())
@@ -35,6 +34,7 @@ int main()
       std::cout << '\n';
       throw std::out_of_range("<INVALID COMMAND>");
     }
+    print< int, std::less< int > >(std::cout, root);
     clear(root);
   }
   catch (const std::invalid_argument& e)
