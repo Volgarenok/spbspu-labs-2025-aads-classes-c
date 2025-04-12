@@ -29,6 +29,12 @@ template< class T, class Comparator >
 BiTree< T, Comparator >* extract(BiTree< T, Comparator >* root, const T& value, BiTree< T, Comparator >** result);
 
 template< class T, class Comparator >
+BiTree< T, Comparator >* begin(BiTree< T, Comparator >* root);
+
+template< class T, class Comparator >
+BiTree< T, Comparator >* next(BiTree< T, Comparator >* root);
+
+template< class T, class Comparator >
 void print(std::ostream& out, BiTree< T, Comparator >* root);
 
 template< class T, class Comparator >
@@ -218,9 +224,64 @@ BiTree< T, Comparator >* find(BiTree< T, Comparator >* root, const T& value, Com
 }
 
 template< class T, class Comparator >
+BiTree< T, Comparator >* begin(BiTree< T, Comparator >* root)
+{
+  if (!root)
+  {
+    return nullptr;
+  }
+  while (root->left)
+  {
+    root = root->left;
+  }
+  return root;
+}
+
+template< class T, class Comparator >
+BiTree< T, Comparator >* next(BiTree< T, Comparator >* root)
+{
+  if (!root)
+  {
+    return nullptr;
+  }
+  if (root->right)
+  {
+    root = root->right;
+    while (root->left)
+    {
+      root = root->left;
+    }
+    return root;
+  }
+  if (!root->parent)
+  {
+    return nullptr;
+  }
+  while (root->parent->left != root)
+  {
+    root = root->parent;
+    if (!root->parent)
+    {
+      return nullptr; 
+    }
+  }
+  return root->parent;
+}
+
+template< class T, class Comparator >
 void print(std::ostream& out, BiTree< T, Comparator >* root)
 {
-  static size_t cnt = 0;
+  if (!root)
+  {
+    return;
+  }
+  auto it = begin(root);
+  out << it->data;
+  for (it = next(it); it != nullptr; it = next(it))
+  {
+    out << " " << it->data;
+  }
+  /*static size_t cnt = 0;
   if (root)
   {
     print(out, root->left);
