@@ -60,10 +60,16 @@ namespace savintsev
       else if (current->parent->right == current)
       {
         auto prev = current;
-        while (current->right)
+        while (current->right == prev)
         {
-          
+          prev = current;
+          current = current->parent;
         }
+        if (current->middle == prev)
+        {
+          current = current->right;
+        }
+        return current;
       }
       return current->parent;
     }
@@ -84,6 +90,34 @@ namespace savintsev
 
   template< class T, class Cmp >
   TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > * root);
+
+  template< class T, class Cmp >
+  bool TriTreeIterator< T, Cmp >::hasNext() const
+  {
+    if (node->parent->left == node || node->middle || node->right)
+    {
+      return true;
+    }
+    else if (node->parent->middle == node && node->parent->right)
+    {
+      return true;
+    }
+    else
+    {
+      auto current = node;
+      auto prev = current;
+      while (current->right == prev)
+      {
+        prev = current;
+        if (!current->parent)
+        {
+          return false;
+        }
+        current = current->parent;
+      }
+      return curren->right != nullptr;
+    }
+  }
 }
 
 #endif
