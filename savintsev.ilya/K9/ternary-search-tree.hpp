@@ -15,7 +15,7 @@ namespace savintsev
   template< class T, class Cmp >
   struct TriTreeIterator
   {
-    using this_t = TriTreeItretor< T, Cmp >;
+    using this_t = TriTreeIterator< T, Cmp >;
 
     TriTree< T, Cmp > * node;
 
@@ -33,7 +33,7 @@ namespace savintsev
         {
           current = current->left;
         }
-        return current;
+        return this_t{current};
       }
       else if (current->right)
       {
@@ -42,11 +42,11 @@ namespace savintsev
         {
           current = current->left;
         }
-        return current;
+        return this_t{current};
       }
       if (current->parent->left == current)
       {
-        return current->parent;
+        return this_t{current->parent};
       }
       else if (current->parent->middle == current)
       {
@@ -55,7 +55,7 @@ namespace savintsev
         {
           current = current->left;
         }
-        return current;
+        return this_t{current};
       }
       else if (current->parent->right == current)
       {
@@ -69,9 +69,9 @@ namespace savintsev
         {
           current = current->right;
         }
-        return current;
+        return this_t{current};
       }
-      return current->parent;
+      return this_t{current->parent};
     }
 
     std::pair< T, T > & data();
@@ -85,7 +85,7 @@ namespace savintsev
     {
       temp = temp->left;
     }
-    return temp;
+    return TriTreeIterator< T, Cmp >{temp};
   }
 
   template< class T, class Cmp >
@@ -94,29 +94,42 @@ namespace savintsev
   template< class T, class Cmp >
   bool TriTreeIterator< T, Cmp >::hasNext() const
   {
-    if (node->parent->left == node || node->middle || node->right)
+    if (node->middle || node->right)
     {
       return true;
     }
-    else if (node->parent->middle == node && node->parent->right)
+    else if (node->parent)
     {
-      return true;
-    }
-    else
-    {
-      auto current = node;
-      auto prev = current;
-      while (current->right == prev)
+      if (node->parent->left == node)
       {
-        prev = current;
-        if (!current->parent)
-        {
-          return false;
-        }
-        current = current->parent;
+        return true;
       }
-      return curren->right != nullptr;
+      else if (node->parent->middle == node && node->parent->right)
+      {
+        return true;
+      }
+      else
+      {
+        auto current = node;
+        auto prev = current;
+        while (current->right == prev)
+        {
+          prev = current;
+          if (!current->parent)
+          {
+            return false;
+          }
+          current = current->parent;
+        }
+        return current->right != nullptr;
+      }
     }
+    return false;
+  }
+  template< class T, class Cmp >
+  std::pair< T, T > & TriTreeIterator< T, Cmp >::data()
+  {
+    return node->data;
   }
 }
 

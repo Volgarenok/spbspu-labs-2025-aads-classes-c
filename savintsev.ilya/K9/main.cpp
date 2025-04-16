@@ -1,4 +1,5 @@
 #include <iostream>
+#include "assert.h"
 #include "ternary-search-tree.hpp"
 #include "utils.h"
 
@@ -33,6 +34,8 @@ int main()
   }
 
   tree_t * root = savintsev::convert_ints_to_tree(data, n);
+  std::cout << "VSE HOROSHO!!!!!\n";
+
   if (!root)
   {
     std::cerr << "ERROR: memory overflow\n";
@@ -40,7 +43,7 @@ int main()
 
   for (auto it = begin(root); it.hasNext(); it = it.next())
   {
-    std::cout << root->data.first << " " << root->data.second << ' ';
+    std::cout << it.data().first << " " << it.data().second << ' ';
   }
   std::cout << '\n';
 }
