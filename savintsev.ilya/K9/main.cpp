@@ -41,9 +41,13 @@ int main()
     std::cerr << "ERROR: memory overflow\n";
   }
 
-  for (auto it = begin(root); it.hasNext(); it = it.next())
+  for (auto it = begin(root);; it = it.next())
   {
     std::cout << it.data().first << " " << it.data().second << ' ';
+    if (!it.hasNext())
+    {
+      break;
+    }
   }
   std::cout << '\n';
 }
