@@ -59,13 +59,20 @@ tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
   }
   catch (const std::bad_alloc & e)
   {
-    //clear(root, n);
+    clear(root);
     return nullptr;
   }
   return root;
 }
 
-//void savintsev::clear(tree_t * root, size_t created)
-//{
-  //cheto
-//}
+void savintsev::clear(tree_t * root)
+{
+  if (!root)
+  {
+    return;
+  }
+  clear(root->left);
+  clear(root->right);
+  clear(root->middle);
+  delete root;
+}
