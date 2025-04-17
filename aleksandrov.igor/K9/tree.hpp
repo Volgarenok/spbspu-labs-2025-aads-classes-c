@@ -2,7 +2,6 @@
 #define TREE_HPP
 
 #include <utility>
-#include <functional>
 #include <cassert>
 
 namespace aleksandrov
@@ -137,3 +136,4 @@ namespace aleksandrov
 }
 
 #endif
+

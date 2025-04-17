@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include "tree-utils.hpp"
 
 int main()
@@ -13,7 +14,7 @@ int main()
     return 1;
   }
 
-  std::pair< int, int >* pairs = new std::pair< int, int >[quantity];  
+  std::pair< int, int >* pairs = new std::pair< int, int >[quantity];
   int a = 0;
   int b = 0;
   for (size_t i = 0; i < quantity; ++i)
@@ -26,27 +27,44 @@ int main()
     }
     pairs[i] = std::make_pair(std::min(a, b), std::max(a, b));
   }
-  
+
   tree_t* pairsTree = getTree(pairs, quantity);
   if (!pairsTree)
   {
     return 0;
   }
-  for (auto it = begin(pairsTree);; it = it.next())
+
+  do
   {
-    std::cout << it.data().first << ' ' << it.data().second << '\n';
-    if (!it.hasNext())
+    std::string command;
+    std::cin >> command;
+    if (std::cin.eof())
     {
-      break;
+      return 0;
+    }
+    if (!std::cin)
+    {
+      std::cerr << "ERROR: Incorrect input!\n";
+      return 1;
+    }
+    int param1 = 0;
+    int param2 = 0;
+    if (!(std::cin >> param1 >> param2))
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+    }
+    try
+    {
+      processCommand(pairsTree, command, param1, param2);
+    }
+    catch (const std::logic_error& e)
+    {
+      std::cerr << "ERROR: " << e.what() << '\n';
+      return 1;
     }
   }
-  for (auto it = rbegin(pairsTree);; it = it.prev())
-  {
-    std::cout << it.data().first << ' ' << it.data().second << '\n';
-    if (!it.hasPrev())
-    {
-      break;
-    }
-  }
+  while (!std::cin.eof());
 }
 

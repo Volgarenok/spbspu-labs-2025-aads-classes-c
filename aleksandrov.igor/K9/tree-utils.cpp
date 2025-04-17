@@ -1,4 +1,5 @@
 #include "tree-utils.hpp"
+#include <iostream>
 
 namespace aleksandrov
 {
@@ -19,7 +20,6 @@ namespace aleksandrov
     catch (const std::bad_alloc&)
     {
       clearTree(pairsTree);
-      return nullptr;
     }
     return pairsTree;
   }
@@ -72,4 +72,78 @@ namespace aleksandrov
     clearTree(tree->right);
     delete tree;
   }
+
+  void processCommand(tree_t* tree, const std::string& command, int param1, int param2)
+  {
+    if (command == "intersects")
+    {
+      std::cout << intersects(tree, param1, param2) << '\n';
+    }
+    else if (command == "covers")
+    {
+      std::cout << covers(tree, param1, param2) << '\n';
+    }
+    else if (command == "avoids")
+    {
+      std::cout << avoids(tree, param1, param2) << '\n';
+    }
+    else
+    {
+      throw std::logic_error("Unknown command!");
+    }
+  }
+
+  size_t intersects(tree_t* tree, int a, int b)
+  {
+    size_t count = 0;
+    for (auto it = begin(tree);; it = it.next())
+    {
+      if ((it.data().first <= b && a <= it.data().second) ||
+        (it.data().second >= a && it.data().first >= b))
+      {
+        ++count;
+      }
+      if (!it.hasNext())
+      {
+        break;
+      }
+    }
+    return count;
+  }
+
+  size_t covers(tree_t* tree, int a, int b)
+  {
+    size_t count = 0;
+    for (auto it = begin(tree);; it = it.next())
+    {
+      if (a <= it.data().first && it.data().second <= b)
+      {
+        ++count;
+      }
+      if (!it.hasNext())
+      {
+        break;
+      }
+    }
+    return count;
+  }
+
+  size_t avoids(tree_t* tree, int a, int b)
+  {
+    size_t count = 0;
+    for (auto it = begin(tree);; it = it.next())
+    {
+      if (!(it.data().first <= b && a <= it.data().second) &&
+          !(it.data().second >= a && it.data().first >= b))
+      {
+        ++count;
+      }
+      if (!it.hasNext())
+      {
+        break;
+      }
+    }
+    return count;
+  }
 }
+
