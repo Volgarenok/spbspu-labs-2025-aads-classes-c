@@ -23,12 +23,24 @@ int main()
     if (!std::cin)
     {
       std::cerr << "ERROR: Incorrect input!\n";
+      delete[] pairs;
       return 1;
     }
     pairs[i] = std::make_pair(std::min(a, b), std::max(a, b));
   }
 
-  tree_t* pairsTree = getTree(pairs, quantity);
+  tree_t* pairsTree = nullptr;
+  try
+  {
+    pairsTree = getTree(pairs, quantity);
+  }
+  catch (const std::bad_alloc&)
+  {
+    std::cerr << "ERROR: Out of memory!\n";
+    delete[] pairs;
+    return 1;
+  }
+  delete[] pairs;
   if (!pairsTree)
   {
     return 0;
@@ -40,11 +52,13 @@ int main()
     std::cin >> command;
     if (std::cin.eof())
     {
+      clearTree(pairsTree);
       return 0;
     }
     if (!std::cin)
     {
       std::cerr << "ERROR: Incorrect input!\n";
+      clearTree(pairsTree);
       return 1;
     }
     int param1 = 0;
@@ -54,6 +68,7 @@ int main()
       std::cout << "<INVALID COMMAND>\n";
       std::cin.clear();
       std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      continue;
     }
     try
     {
@@ -62,9 +77,11 @@ int main()
     catch (const std::logic_error& e)
     {
       std::cerr << "ERROR: " << e.what() << '\n';
+      clearTree(pairsTree);
       return 1;
     }
   }
   while (!std::cin.eof());
+  clearTree(pairsTree);
 }
 

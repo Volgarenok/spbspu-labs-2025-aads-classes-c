@@ -5,7 +5,7 @@
 #include <cassert>
 
 namespace aleksandrov
-{
+{  
   template< class T, class Cmp >
   struct TriTree
   {
@@ -29,7 +29,7 @@ namespace aleksandrov
 
     this_t fallLeft() const;
     this_t fallRight() const;
-
+    
     std::pair< T, T >& data();
 
     bool operator==(const this_t&) const;

@@ -9,7 +9,7 @@ namespace aleksandrov
     {
       return nullptr;
     }
-    tree_t* pairsTree = new tree_t{pairs[0]};
+    tree_t* pairsTree = new tree_t{pairs[0], nullptr, nullptr, nullptr, nullptr};
     try
     {
       for (size_t i = 1; i < quantity; ++i)
@@ -20,12 +20,17 @@ namespace aleksandrov
     catch (const std::bad_alloc&)
     {
       clearTree(pairsTree);
+      throw;
     }
     return pairsTree;
   }
 
   void pushPair(tree_t* tree, const std::pair< int, int >& pair)
   {
+    if (!tree)
+    {
+      return;
+    }
     if (pair.second < tree->data.first)
     {
       if (!tree->left)
