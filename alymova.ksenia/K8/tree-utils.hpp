@@ -281,18 +281,6 @@ void print(std::ostream& out, BiTree< T, Comparator >* root)
   {
     out << " " << it->data;
   }
-  /*static size_t cnt = 0;
-  if (root)
-  {
-    print(out, root->left);
-    print(out, root->right);
-    if (cnt != 0)
-    {
-      out << " ";
-    }
-    out << root->data;
-    cnt += 1;
-  }*/
 }
 
 template< class T, class Comparator >
