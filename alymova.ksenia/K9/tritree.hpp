@@ -53,6 +53,7 @@ TriTree< T, Cmp >* convert(std::pair< T, T >* pairs, size_t cnt)
         if (tmp->left)
         {
           tmp = tmp->left;
+          continue;
         }
         else
         {
@@ -66,6 +67,7 @@ TriTree< T, Cmp >* convert(std::pair< T, T >* pairs, size_t cnt)
         if (tmp->middle)
         {
           tmp = tmp->middle;
+          continue;
         }
         else
         {
@@ -79,6 +81,7 @@ TriTree< T, Cmp >* convert(std::pair< T, T >* pairs, size_t cnt)
         if (tmp->right)
         {
           tmp = tmp->right;
+          continue;
         }
         else
         {
@@ -87,8 +90,11 @@ TriTree< T, Cmp >* convert(std::pair< T, T >* pairs, size_t cnt)
           break;
         }
       }
-      delete node;
-      break;
+      else
+      {
+        delete node;
+        break;
+      }
     }
   }
   return root;

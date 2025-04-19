@@ -18,6 +18,7 @@ struct TriTreeIterator {
 private:
   TriTree< T, Cmp >* nextForMiddleParent(TriTree< T, Cmp >* node) const;
   TriTree< T, Cmp >* nextForRightParent(TriTree< T, Cmp >* node) const;
+  TriTree< T, Cmp >* nextForLeaf(TriTree< T, Cmp >* leaf) const;
 };
 
 template< class T, class Cmp >
@@ -72,20 +73,23 @@ bool TriTreeIterator< T, Cmp >::hasNext() const
     {
       return false;
     }
-    if (tmp->parent->left == tmp)
-    {
-      return true;
-    }
-    if (tmp->parent->middle == tmp)
-    {
-      return nextForMiddleParent(tmp->parent) != nullptr;
-    }
-    if (tmp->parent->right == tmp)
-    {
-      return nextForRightParent(tmp->parent) != nullptr;
-    }
+    return nextForLeaf(tmp) != nullptr;
   }
   return true;
+}
+
+template< class T, class Cmp >
+TriTree< T, Cmp >* TriTreeIterator< T, Cmp >::nextForLeaf(TriTree< T, Cmp >* leaf) const
+{
+  if (leaf->parent->left == leaf)
+  {
+    return {leaf->parent};
+  }
+  if (leaf->parent->middle == leaf)
+  {
+    return {nextForMiddleParent(leaf->parent)};
+  }
+  return {nextForRightParent(leaf->parent)};
 }
 
 template< class T, class Cmp >
@@ -96,18 +100,7 @@ TriTree< T, Cmp >* TriTreeIterator< T, Cmp >::nextForMiddleParent(TriTree< T, Cm
   TriTree< T, Cmp >* tmp = node_parent;
   if (tmp->parent)
   {
-    while (tmp->parent->left != tmp)
-    {
-      tmp = tmp->parent;
-      if (!tmp->parent)
-      {
-        break;
-      }
-    }
-    if (!next_parent)
-    {
-      next_parent = tmp->parent;
-    }
+    next_parent = nextForLeaf(tmp);
   }
   tmp = node_parent;
   if (tmp->right)
@@ -140,15 +133,7 @@ TriTree< T, Cmp >* TriTreeIterator< T, Cmp >::nextForRightParent(TriTree< T, Cmp
   TriTree< T, Cmp >* next_parent = nullptr;
   if (node_parent->parent)
   {
-    while (node_parent->parent->left != node_parent)
-    {
-      node_parent = node_parent->parent;
-      if (!node_parent->parent)
-      {
-        return nullptr;
-      }
-    }
-    return node_parent->parent;
+    return nextForLeaf(node_parent);
   }
   return nullptr;
 }
@@ -179,14 +164,6 @@ TriTreeIterator< T, Cmp > TriTreeIterator< T, Cmp >::next() const
   {
     return {nullptr};
   }
-  if (tmp->parent->left == tmp)
-  {
-    return {tmp->parent};
-  }
-  if (tmp->parent->middle == tmp)
-  {
-    return {nextForMiddleParent(tmp->parent)};
-  }
-  return {nextForRightParent(tmp->parent)};
+  return {nextForLeaf(tmp)};
 }
 #endif
