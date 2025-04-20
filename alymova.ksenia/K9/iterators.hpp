@@ -19,9 +19,9 @@ private:
   TriTree< T, Cmp >* nextForLeaf(TriTree< T, Cmp >* leaf) const;
   TriTree< T, Cmp >* nextForMiddleParent(TriTree< T, Cmp >* node) const;
   TriTree< T, Cmp >* nextForRightParent(TriTree< T, Cmp >* node) const;
-  TriTree< T, Cmp >* prevForLeaf(TriTree< T, Cmp >* leaf) const;
-  TriTree< T, Cmp >* prevForMiddleParent(TriTree< T, Cmp >* node) const;
-  TriTree< T, Cmp >* prevForLeftParent(TriTree< T, Cmp >* node) const;
+  //TriTree< T, Cmp >* prevForLeaf(TriTree< T, Cmp >* leaf) const;
+  //TriTree< T, Cmp >* prevForMiddleParent(TriTree< T, Cmp >* node) const;
+  //TriTree< T, Cmp >* prevForLeftParent(TriTree< T, Cmp >* node) const;
 };
 
 template< class T, class Cmp >
@@ -79,12 +79,6 @@ bool TriTreeIterator< T, Cmp >::hasNext() const
     return nextForLeaf(tmp) != nullptr;
   }
   return true;
-}
-
-template< class T, class Cmp >
-TriTreeIterator< T, Cmp > TriTreeIterator< T, Cmp >::prev() const
-{
-
 }
 
 template< class T, class Cmp >
