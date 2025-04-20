@@ -16,9 +16,12 @@ struct TriTreeIterator {
   this_t next() const;
   std::pair< T, T >& data();
 private:
+  TriTree< T, Cmp >* nextForLeaf(TriTree< T, Cmp >* leaf) const;
   TriTree< T, Cmp >* nextForMiddleParent(TriTree< T, Cmp >* node) const;
   TriTree< T, Cmp >* nextForRightParent(TriTree< T, Cmp >* node) const;
-  TriTree< T, Cmp >* nextForLeaf(TriTree< T, Cmp >* leaf) const;
+  TriTree< T, Cmp >* prevForLeaf(TriTree< T, Cmp >* leaf) const;
+  TriTree< T, Cmp >* prevForMiddleParent(TriTree< T, Cmp >* node) const;
+  TriTree< T, Cmp >* prevForLeftParent(TriTree< T, Cmp >* node) const;
 };
 
 template< class T, class Cmp >
@@ -76,6 +79,41 @@ bool TriTreeIterator< T, Cmp >::hasNext() const
     return nextForLeaf(tmp) != nullptr;
   }
   return true;
+}
+
+template< class T, class Cmp >
+TriTreeIterator< T, Cmp > TriTreeIterator< T, Cmp >::prev() const
+{
+
+}
+
+template< class T, class Cmp >
+TriTreeIterator< T, Cmp > TriTreeIterator< T, Cmp >::next() const
+{
+  TriTree< T, Cmp >* tmp = node;
+  if (tmp->middle)
+  {
+    tmp = tmp->middle;
+    while (tmp->left)
+    {
+      tmp = tmp->left;
+    }
+    return {tmp};
+  }
+  if (tmp->right)
+  {
+    tmp = tmp->right;
+    while (tmp->left)
+    {
+      tmp = tmp->left;
+    }
+    return {tmp};
+  }
+  if (!tmp->parent)
+  {
+    return {nullptr};
+  }
+  return {nextForLeaf(tmp)};
 }
 
 template< class T, class Cmp >
@@ -138,32 +176,4 @@ TriTree< T, Cmp >* TriTreeIterator< T, Cmp >::nextForRightParent(TriTree< T, Cmp
   return nullptr;
 }
 
-template< class T, class Cmp >
-TriTreeIterator< T, Cmp > TriTreeIterator< T, Cmp >::next() const
-{
-  TriTree< T, Cmp >* tmp = node;
-  if (tmp->middle)
-  {
-    tmp = tmp->middle;
-    while (tmp->left)
-    {
-      tmp = tmp->left;
-    }
-    return {tmp};
-  }
-  if (tmp->right)
-  {
-    tmp = tmp->right;
-    while (tmp->left)
-    {
-      tmp = tmp->left;
-    }
-    return {tmp};
-  }
-  if (!tmp->parent)
-  {
-    return {nullptr};
-  }
-  return {nextForLeaf(tmp)};
-}
 #endif

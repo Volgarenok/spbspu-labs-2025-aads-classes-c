@@ -48,7 +48,7 @@ TriTree< T, Cmp >* convert(std::pair< T, T >* pairs, size_t cnt)
     }
     while (tmp)
     {
-      if (tmp->data.first > pairs[i].second)
+      if (std::less< T >{}(pairs[i].second, tmp->data.first))
       {
         if (tmp->left)
         {
@@ -62,7 +62,7 @@ TriTree< T, Cmp >* convert(std::pair< T, T >* pairs, size_t cnt)
           break;
         }
       }
-      else if (tmp->data.first < pairs[i].first && tmp->data.second > pairs[i].second)
+      else if (std::less< T >{}(tmp->data.first, pairs[i].first) && std::less< T >{}(pairs[i].second, tmp->data.second))
       {
         if (tmp->middle)
         {
@@ -76,7 +76,7 @@ TriTree< T, Cmp >* convert(std::pair< T, T >* pairs, size_t cnt)
           break;
         }
       }
-      else if (tmp->data.second < pairs[i].first)
+      else if (std::less< T >{}(tmp->data.second, pairs[i].first))
       {
         if (tmp->right)
         {

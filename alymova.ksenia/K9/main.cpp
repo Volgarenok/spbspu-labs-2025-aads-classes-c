@@ -4,6 +4,7 @@
 #include <cstddef>
 #include "tritree.hpp"
 #include "iterators.hpp"
+#include "utils.hpp"
 
 int main()
 {
@@ -29,12 +30,47 @@ int main()
       std::swap(pairs[i].first, pairs[i].second);
     }
   }
-  TriTree< int, std::less< int > >* root = convert< int, std::less< int > >(pairs, cnt);
-
-  auto it = begin(root);
-  for (; it.hasNext(); it = it.next())
+  TriTree< int, std::less< int > >* root = nullptr;
+  if (cnt > 0)
   {
-    std::cout << it.data().first << " " << it.data().second << '\n';
+    try
+    {
+      root = convert< int, std::less< int > >(pairs, cnt);
+    }
+    catch (const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
+      return 1;
+    }
   }
-  std::cout << it.data().first << " " << it.data().second << '\n';
+  
+  std::string command;
+  while (std::cin >> command)
+  {
+    std::pair< int, int > nums;
+    std::cin >> nums.first >> nums.second;
+    if (std::cin.fail() || nums.first > nums.second)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+    if (command == "intersects")
+    {
+      std::cout << intersects(root, nums) << '\n';
+    }
+    else if (command == "covers")
+    {
+      std::cout << covers(root, nums) << '\n';
+    }
+    else if (command == "avoids")
+    {
+      std::cout << avoids(root, nums) << '\n';
+    }
+    else
+    {
+      clear< int, std::less< int > >(root);
+      std::cerr << "<UNKNOWN COMMAND>\n";
+      return 1;
+    }
+  }
+  clear< int, std::less< int > >(root);
 }
