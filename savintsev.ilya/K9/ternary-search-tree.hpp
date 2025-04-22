@@ -25,60 +25,53 @@ namespace savintsev
     this_t prev() const;
     this_t next() const
     {
-      auto current = node;
-      if (current->middle)
+      this_t result(*this);
+      if (result.node->middle)
       {
-        current = current->middle;
-        while (current->left)
+        result.node = result.node->middle;
+        while (result.node->left)
         {
-          current = current->left;
+          result.node = result.node->left;
         }
-        return this_t{current};
       }
-      else if (current->right)
+      else if (result.node->right)
       {
-        current = current->right;
-        while (current->left)
+        result.node = result.node->right;
+        while (result.node->left)
         {
-          current = current->left;
+          result.node = result.node->left;
         }
-        return this_t{current};
       }
-      if (current->parent->left == current)
+      else
       {
-        return this_t{current->parent};
-      }
-      else if (current->parent->middle == current)
-      {
-        current = current->parent->right;
-        while (current->left)
+        while (result.node->parent)
         {
-          current = current->left;
+          TriTree< T, Cmp > * prev = result.node;
+          result.node = result.node->parent;
+          if (result.node->left == prev)
+          {
+            return result;
+          }
+          if (result.node->middle == prev && result.node->right)
+          {
+            result.node = result.node->right;
+            while (result.node->left)
+            {
+              result.node = result.node->left;
+            }
+            return result;
+          }
         }
-        return this_t{current};
+        result.node = nullptr;
       }
-      else if (current->parent->right == current)
-      {
-        auto prev = current;
-        while (current->right == prev)
-        {
-          prev = current;
-          current = current->parent;
-        }
-        if (current->middle == prev)
-        {
-          current = current->right;
-        }
-        return this_t{current};
-      }
-      return this_t{current->parent};
+      return result;
     }
 
-    std::pair< T, T > & data();
+    std::pair< T, T >& data();
   };
 
   template< class T, class Cmp >
-  TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp > * root)
+  TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp >* root)
   {
     auto temp = root;
     while (temp->left)
@@ -89,43 +82,31 @@ namespace savintsev
   }
 
   template< class T, class Cmp >
-  TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > * root);
+  TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp >* root);
 
   template< class T, class Cmp >
   bool TriTreeIterator< T, Cmp >::hasNext() const
   {
+    if (!node)
+    {
+      return false;
+    }
     if (node->middle || node->right)
     {
       return true;
     }
-    else if (node->parent)
+    TriTree< T, Cmp > * current = node;
+    while (current->parent)
     {
-      if (node->parent->left == node)
+      if (current->parent->left == current || current->parent->middle == current)
       {
         return true;
       }
-      else if (node->parent->middle == node && node->parent->right)
-      {
-        return true;
-      }
-      else
-      {
-        auto current = node;
-        auto prev = current;
-        while (current->right == prev)
-        {
-          prev = current;
-          if (!current->parent)
-          {
-            return false;
-          }
-          current = current->parent;
-        }
-        return current->right != nullptr;
-      }
+      current = current->parent;
     }
     return false;
   }
+
   template< class T, class Cmp >
   std::pair< T, T > & TriTreeIterator< T, Cmp >::data()
   {

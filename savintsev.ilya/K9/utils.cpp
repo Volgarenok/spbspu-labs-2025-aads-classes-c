@@ -4,11 +4,11 @@
 tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
 {
   tree_t * root = new tree_t{vals[0]};
-  std::cout << root->data.first << ' ' << root->data.second << ' ';
+  //std::cout << root->data.first << ' ' << root->data.second << ' ';
   tree_t * temp = root;
   try
   {
-    for (size_t i = 1; i < n; ++i)
+    for (size_t i = 1; i < n;)
     {
       if (vals[i].second < temp->data.first)
       {
@@ -21,8 +21,9 @@ tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
           temp->left = new tree_t{vals[i]};
           temp->left->parent = temp;
           temp = temp->left;
-          std::cout << temp->data.first << ' ' << temp->data.second << ' ';
+          //std::cout << temp->data.first << ' ' << temp->data.second << ' ';
           temp = root;
+          ++i;
         }
       }
       else if (vals[i].first > temp->data.first && vals[i].second < temp->data.second)
@@ -36,8 +37,9 @@ tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
           temp->middle = new tree_t{vals[i]};
           temp->middle->parent = temp;
           temp = temp->middle;
-          std::cout << temp->data.first << ' ' << temp->data.second << ' ';
+          //std::cout << temp->data.first << ' ' << temp->data.second << ' ';
           temp = root;
+          ++i;
         }
       }
       else if (vals[i].first > temp->data.second)
@@ -51,9 +53,14 @@ tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
           temp->right = new tree_t{vals[i]};
           temp->right->parent = temp;
           temp = temp->right;
-          std::cout << temp->data.first << ' ' << temp->data.second << ' ';
+          //std::cout << temp->data.first << ' ' << temp->data.second << ' ';
           temp = root;
+          ++i;
         }
+      }
+      else
+      {
+        ++i;
       }
     }
   }

@@ -34,20 +34,16 @@ int main()
   }
 
   tree_t * root = savintsev::convert_ints_to_tree(data, n);
-  std::cout << "VSE HOROSHO!!!!!\n";
 
   if (!root)
   {
     std::cerr << "ERROR: memory overflow\n";
   }
 
-  for (auto it = begin(root);; it = it.next())
+  size_t i = 0;
+  for (auto it = begin(root); i < 6; it = it.next(), ++i)
   {
-    std::cout << it.data().first << " " << it.data().second << ' ';
-    if (!it.hasNext())
-    {
-      break;
-    }
+    std::cout << it.data().first << ' ' << it.data().second << ' ';
   }
   std::cout << '\n';
 }
