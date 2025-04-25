@@ -41,14 +41,7 @@ int main()
     std::cerr << "ERROR: memory overflow\n";
     return 1;
   }
-/*
-  auto it = begin(root);
-  for (;it.hasNext();it = it.next())
-  {
-    std::cout << it.data().first << " " << it.data().second << "|";
-  }
-  std::cout << it.data().first << " " << it.data().second << "|";
-*/
+
   std::string command;
   int v1 = 0, v2 = 0;
 

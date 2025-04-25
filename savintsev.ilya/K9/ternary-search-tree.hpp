@@ -20,65 +20,7 @@ namespace savintsev
     TriTree< T, Cmp > * node;
 
     bool hasNext() const;
-    bool hasPrev() const
-    {
-      if (!node)
-      {
-        return false;
-      }
-      if (node->left)
-      {
-        return true;
-      }
-      TriTree< T, Cmp > * current = node;
-      while (current->parent)
-      {
-        if (current->parent->right == current || current->parent->middle == current)
-        {
-          return true;
-        }
-        current = current->parent;
-      }
-      return false;
-    }
-    this_t prev() const
-    {
-      this_t result(*this);
-      if (result.node->left)
-      {
-        result.node = result.node->left;
-        while (result.node->right)
-        {
-          result.node = result.node->right;
-        }
-      }
-      else
-      {
-        while (result.node->parent)
-        {
-          TriTree< T, Cmp > * prev = result.node;
-          result.node = result.node->parent;
-          if (result.node->right == prev)
-          {
-            return result;
-          }
-          if (result.node->middle == prev)
-          {
-            if (result.node->left)
-            {
-              result.node = result.node->left;
-              while (result.node->right)
-              {
-                result.node = result.node->right;
-              }
-            }
-            return result;
-          }
-        }
-        result.node = nullptr;
-      }
-      return result;
-    }
+    bool hasPrev() const;
     this_t next() const
     {
       this_t result(*this);
@@ -114,6 +56,49 @@ namespace savintsev
             while (result.node->left)
             {
               result.node = result.node->left;
+            }
+            return result;
+          }
+        }
+        result.node = nullptr;
+      }
+      return result;
+    }
+    this_t prev() const
+    {
+      this_t result(*this);
+      if (result.node->middle)
+      {
+        result.node = result.node->middle;
+        while (result.node->right)
+        {
+          result.node = result.node->right;
+        }
+      }
+      else if (result.node->left)
+      {
+        result.node = result.node->left;
+        while (result.node->right)
+        {
+          result.node = result.node->right;
+        }
+      }
+      else
+      {
+        while (result.node->parent)
+        {
+          TriTree< T, Cmp > * prev = result.node;
+          result.node = result.node->parent;
+          if (result.node->right == prev)
+          {
+            return result;
+          }
+          if (result.node->middle == prev && result.node->left)
+          {
+            result.node = result.node->left;
+            while (result.node->right)
+            {
+              result.node = result.node->right;
             }
             return result;
           }
@@ -172,6 +157,41 @@ namespace savintsev
         {
           current = current->parent;
           if (current->right)
+          {
+            return true;
+          }
+        }
+        break;
+      }
+      current = current->parent;
+    }
+    return false;
+  }
+
+  template <class T, class Cmp>
+  bool TriTreeIterator< T, Cmp >::hasPrev() const
+  {
+    if (!node)
+    {
+      return false;
+    }
+    if (node->middle || node->left)
+    {
+      return true;
+    }
+    TriTree< T, Cmp > * current = node;
+    while (current->parent)
+    {
+      if (current->parent->right == current)
+      {
+        return true;
+      }
+      else if (current->parent->middle == current)
+      {
+        while (current->parent)
+        {
+          current = current->parent;
+          if (current->left)
           {
             return true;
           }
