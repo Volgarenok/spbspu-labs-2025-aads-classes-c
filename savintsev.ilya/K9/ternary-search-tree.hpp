@@ -162,9 +162,21 @@ namespace savintsev
     TriTree< T, Cmp > * current = node;
     while (current->parent)
     {
-      if (current->parent->left == current || current->parent->middle == current)
+      if (current->parent->left == current)
       {
         return true;
+      }
+      else if (current->parent->middle == current)
+      {
+        while (current->parent)
+        {
+          current = current->parent;
+          if (current->right)
+          {
+            return true;
+          }
+        }
+        break;
       }
       current = current->parent;
     }

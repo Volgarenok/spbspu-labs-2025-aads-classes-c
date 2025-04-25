@@ -80,56 +80,63 @@ void savintsev::clear(tree_t * root)
   delete root;
 }
 
-size_t savintsev::intersect(tree_t * root, int v1, int v2)
+namespace savintsev
 {
-  size_t count = 0;
-  auto it = begin(root);
-  for (; it.hasNext(); it = it.next())
+  template< typename P >
+  size_t count_if(tree_t *root, P predicate, int v1, int v2)
   {
-    if (((it.data().first - v2) * (v1 - it.data().second)) > 0)
+    size_t count = 0;
+    auto it = begin(root);
+    for (; it.hasNext(); it = it.next())
+    {
+      if (predicate(it.data(), v1, v2))
+      {
+        count++;
+      }
+    }
+    if (predicate(it.data(), v1, v2))
     {
       count++;
     }
+    return count;
   }
-  if (((it.data().first - v2) * (v1 - it.data().second)) > 0)
-  {
-    count++;
-  }
-  return count;
-}
 
-size_t savintsev::avoids(tree_t * root, int v1, int v2)
-{
-  size_t count = 0;
-  auto it = begin(root);
-  for (; it.hasNext(); it = it.next())
+  struct IntersectsPredicate
   {
-    if (((it.data().first - v2) * (v1 - it.data().second)) <= 0)
+    bool operator()(const std::pair< int, int > & p, int v1, int v2) const
     {
-      count++;
+      return ((p.first - v2) * (v1 - p.second)) >= 0;
     }
-  }
-  if (((it.data().first - v2) * (v1 - it.data().second)) <= 0)
-  {
-    count++;
-  }
-  return count;
-}
+  };
 
-size_t savintsev::covers(tree_t * root, int v1, int v2)
-{
-  size_t count = 0;
-  auto it = begin(root);
-  for (; it.hasNext(); it = it.next())
+  struct AvoidsPredicate
   {
-    if (it.data().first <= v1 && it.data().second >= v2)
+    bool operator()(const std::pair< int, int > & p, int v1, int v2) const
     {
-      count++;
+      return ((p.first - v2) * (v1 - p.second)) < 0;
     }
-  }
-  if (it.data().first <= v1 && it.data().second >= v2)
+  };
+
+  struct CoversPredicate
   {
-    count++;
+    bool operator()(const std::pair< int, int > & p, int v1, int v2) const
+    {
+      return p.first >= v1 && p.second <= v2;
+    }
+  };
+
+  size_t intersects(tree_t * root, int v1, int v2)
+  {
+    return count_if(root, IntersectsPredicate{}, v1, v2);
   }
-  return count;
+
+  size_t avoids(tree_t * root, int v1, int v2)
+  {
+    return count_if(root, AvoidsPredicate{}, v1, v2);
+  }
+
+  size_t covers(tree_t * root, int v1, int v2)
+  {
+    return count_if(root, CoversPredicate{}, v1, v2);
+  }
 }
