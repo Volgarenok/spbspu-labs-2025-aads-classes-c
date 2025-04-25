@@ -1,5 +1,6 @@
 #include <iostream>
-#include "assert.h"
+#include <string>
+#include <limits>
 #include "ternary-search-tree.hpp"
 #include "utils.h"
 
@@ -38,12 +39,50 @@ int main()
   if (!root)
   {
     std::cerr << "ERROR: memory overflow\n";
+    return 1;
   }
 
-  size_t i = 0;
-  for (auto it = begin(root); i < 6; it = it.next(), ++i)
+  auto it = begin(root);
+  for (;it.hasNext();it = it.next())
   {
-    std::cout << it.data().first << ' ' << it.data().second << ' ';
+    std::cout << it.data().first << " " << it.data().second << "|";
   }
-  std::cout << '\n';
+  std::cout << it.data().first << " " << it.data().second << "|";
+
+  std::string command;
+  int v1 = 0, v2 = 0;
+
+  while (std::cin >> command)
+  {
+    std::cin >> v1 >> v2;
+    if (!std::cin)
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits< std::streamsize >::max(), '\n');
+      std::cout << "<INVALID COMMAND>\n";
+      continue;
+    }
+    if (v1 >= v2)
+    {
+      std::cout << "<INVALID COMMAND>\n";
+      continue;
+    }
+    if (command == "intersects")
+    {
+      std::cout << savintsev::intersect(root, v1, v2) << '\n';
+    }
+    else if (command == "covers")
+    {
+      std::cout << savintsev::covers(root, v1, v2) << '\n';
+    }
+    else if (command == "avoids")
+    {
+      std::cout << savintsev::avoids(root, v1, v2) << '\n';
+    }
+    else
+    {
+      std::cout << "ERROR: INVALID COMMAND\n";
+      return 1;
+    }
+  }
 }

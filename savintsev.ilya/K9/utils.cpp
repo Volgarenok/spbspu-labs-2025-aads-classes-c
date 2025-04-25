@@ -4,7 +4,6 @@
 tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
 {
   tree_t * root = new tree_t{vals[0]};
-  //std::cout << root->data.first << ' ' << root->data.second << ' ';
   tree_t * temp = root;
   try
   {
@@ -21,7 +20,6 @@ tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
           temp->left = new tree_t{vals[i]};
           temp->left->parent = temp;
           temp = temp->left;
-          //std::cout << temp->data.first << ' ' << temp->data.second << ' ';
           temp = root;
           ++i;
         }
@@ -37,7 +35,6 @@ tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
           temp->middle = new tree_t{vals[i]};
           temp->middle->parent = temp;
           temp = temp->middle;
-          //std::cout << temp->data.first << ' ' << temp->data.second << ' ';
           temp = root;
           ++i;
         }
@@ -53,7 +50,6 @@ tree_t * savintsev::convert_ints_to_tree(std::pair< int, int > * vals, size_t n)
           temp->right = new tree_t{vals[i]};
           temp->right->parent = temp;
           temp = temp->right;
-          //std::cout << temp->data.first << ' ' << temp->data.second << ' ';
           temp = root;
           ++i;
         }
@@ -82,4 +78,58 @@ void savintsev::clear(tree_t * root)
   clear(root->right);
   clear(root->middle);
   delete root;
+}
+
+size_t savintsev::intersect(tree_t * root, int v1, int v2)
+{
+  size_t count = 0;
+  auto it = begin(root);
+  for (; it.hasNext(); it = it.next())
+  {
+    if (((it.data().first - v2) * (v1 - it.data().second)) > 0)
+    {
+      count++;
+    }
+  }
+  if (((it.data().first - v2) * (v1 - it.data().second)) > 0)
+  {
+    count++;
+  }
+  return count;
+}
+
+size_t savintsev::avoids(tree_t * root, int v1, int v2)
+{
+  size_t count = 0;
+  auto it = begin(root);
+  for (; it.hasNext(); it = it.next())
+  {
+    if (((it.data().first - v2) * (v1 - it.data().second)) <= 0)
+    {
+      count++;
+    }
+  }
+  if (((it.data().first - v2) * (v1 - it.data().second)) <= 0)
+  {
+    count++;
+  }
+  return count;
+}
+
+size_t savintsev::covers(tree_t * root, int v1, int v2)
+{
+  size_t count = 0;
+  auto it = begin(root);
+  for (; it.hasNext(); it = it.next())
+  {
+    if (it.data().first <= v1 && it.data().second >= v2)
+    {
+      count++;
+    }
+  }
+  if (it.data().first <= v1 && it.data().second >= v2)
+  {
+    count++;
+  }
+  return count;
 }

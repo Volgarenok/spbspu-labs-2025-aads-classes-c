@@ -20,9 +20,65 @@ namespace savintsev
     TriTree< T, Cmp > * node;
 
     bool hasNext() const;
-    bool hasPrev() const;
-
-    this_t prev() const;
+    bool hasPrev() const
+    {
+      if (!node)
+      {
+        return false;
+      }
+      if (node->left)
+      {
+        return true;
+      }
+      TriTree< T, Cmp > * current = node;
+      while (current->parent)
+      {
+        if (current->parent->right == current || current->parent->middle == current)
+        {
+          return true;
+        }
+        current = current->parent;
+      }
+      return false;
+    }
+    this_t prev() const
+    {
+      this_t result(*this);
+      if (result.node->left)
+      {
+        result.node = result.node->left;
+        while (result.node->right)
+        {
+          result.node = result.node->right;
+        }
+      }
+      else
+      {
+        while (result.node->parent)
+        {
+          TriTree< T, Cmp > * prev = result.node;
+          result.node = result.node->parent;
+          if (result.node->right == prev)
+          {
+            return result;
+          }
+          if (result.node->middle == prev)
+          {
+            if (result.node->left)
+            {
+              result.node = result.node->left;
+              while (result.node->right)
+              {
+                result.node = result.node->right;
+              }
+            }
+            return result;
+          }
+        }
+        result.node = nullptr;
+      }
+      return result;
+    }
     this_t next() const
     {
       this_t result(*this);
@@ -67,11 +123,11 @@ namespace savintsev
       return result;
     }
 
-    std::pair< T, T >& data();
+    std::pair< T, T > & data();
   };
 
   template< class T, class Cmp >
-  TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp >* root)
+  TriTreeIterator< T, Cmp > begin(TriTree< T, Cmp > * root)
   {
     auto temp = root;
     while (temp->left)
@@ -82,7 +138,15 @@ namespace savintsev
   }
 
   template< class T, class Cmp >
-  TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp >* root);
+  TriTreeIterator< T, Cmp > rbegin(TriTree< T, Cmp > * root)
+  {
+    auto temp = root;
+    while (temp->right)
+    {
+      temp = temp->right;
+    }
+    return TriTreeIterator< T, Cmp >{temp};
+  }
 
   template< class T, class Cmp >
   bool TriTreeIterator< T, Cmp >::hasNext() const
